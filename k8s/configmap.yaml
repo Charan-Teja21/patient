@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: patient-api-config
+  namespace: ${APP_NAMESPACE}
+data:
+  SPRING_PROFILES_ACTIVE: "prod"
+  SPRING_APPLICATION_NAME: "Patient Management System"
+  SERVER_PORT: "${APP_PORT}"

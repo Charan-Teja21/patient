@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: patient-api
+  namespace: ${APP_NAMESPACE}
+  labels:
+    app: patient-api
+spec:
+  replicas: ${REPLICA_COUNT}
+  selector:
+    matchLabels:
+      app: patient-api
+  template:
+    metadata:
+      labels:
+        app: patient-api
+    spec:
+      containers:
+      - name: patient-api
+        image: ${IMAGE_NAME}:${IMAGE_TAG}
+        imagePullPolicy: Never
+        ports:
+        - containerPort: ${APP_PORT}
+          name: http
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "100m"
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+        livenessProbe:
+          httpGet:
+            path: /api/patients
+            port: ${APP_PORT}
+          initialDelaySeconds: 30
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /api/patients
+            port: ${APP_PORT}
+          initialDelaySeconds: 20
+          periodSeconds: 5
